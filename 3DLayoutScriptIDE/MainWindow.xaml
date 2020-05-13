@@ -1,0 +1,455 @@
+﻿<Window x:Class="_3DLayoutScriptIDE.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_3DLayoutScriptIDE"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        x:Name="Window"
+        Closed="CloseWindow"
+        KeyDown="WindowKeyDown"
+        Title="3D Layout Script IDE - 2020">
+    
+    
+    <Grid x:Name="gridMain" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto" Margin="0,0,0,0" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" MinHeight="60" MaxHeight="100"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid  Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Height="20" Width="Auto"  VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0">
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_New"  Click="MakeNew"/>
+                        <MenuItem Header="_Open" Click="Open"/>
+                        <MenuItem Header="_Save" Click="Save"/>
+                        <Separator />
+                        <MenuItem Header="_Exit" Click="CloseWindow"/>
+                    </MenuItem>
+                </Menu>
+                <TextBox AcceptsReturn="True" />
+            </DockPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Button Width="35" Margin="30 15 0 0" Height="35" HorizontalAlignment="Left" ToolTip="New" Click="MakeNew">
+                        <Image Source="/UIPics/new.png" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Width="35" Margin="70 15 0 0" Height="35" HorizontalAlignment="Left" ToolTip="Open" Click="Open">
+                        <Image Source="/UIPics/open.png" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Width="35" Margin="110 15 0 0" Height="35" HorizontalAlignment="Left" ToolTip="Save" Click="Save">
+                        <Image Source="/UIPics/save.png" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Button Width="30" Margin="0 15 82 0" Height="30" HorizontalAlignment="Center" ToolTip="Compile and run in MS 3D Viewer" Click="CompileAndRun">
+                        <Image Source="/UIPics/play.png" Width="25" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Width="100" Height="30" HorizontalAlignment="Center" Margin="52 15 0 0" Content="Compile" ToolTip="Regular compilation outputting an .obj file" Click="Compile"  />
+                </Grid>                
+            </Grid>
+            
+
+
+        </Grid>
+        
+
+        <GridSplitter VerticalAlignment="Stretch" Height="5" HorizontalAlignment="Stretch" Grid.Row="1"/>
+
+        <Grid x:Name="gridMiddle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Width="Auto" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0" MaxWidth="400" />  <!--Project ablak 0-->
+                <ColumnDefinition Width="0" />  <!--Project separator 1-->
+                <ColumnDefinition Width="*" />  <!--Editor 2-->
+                <ColumnDefinition Width="0" />  <!--Documentation separator 3-->
+                <ColumnDefinition Width="0" MaxWidth="400" />  <!--Documentation ablak 4-->
+                <ColumnDefinition Width="30" /> <!--Oldalléc 5-->
+            </Grid.ColumnDefinitions>
+            
+            <!-- projekt ablak -->
+            <Grid x:Name="gridProjects" Height="Auto" Width="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Column="0"  IsEnabled="False">
+                <TreeView x:Name="ProjectTree" Width="Auto" HorizontalAlignment="Stretch">
+                </TreeView>
+            </Grid>
+            <!-- projekt ablak / editor separator -->
+            <GridSplitter x:Name="splitterProjects" Width="5" HorizontalAlignment="Stretch" Margin="0,0,0,0"  Grid.Column="1" IsEnabled="False"/>
+
+            <Grid Grid.Column="2" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="150" MaxHeight="400" MinHeight="100"/>
+                </Grid.RowDefinitions>                
+                
+                <avalonEdit:TextEditor 
+                    Grid.Row="0"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ShowLineNumbers="True"
+                    Name="textEditor"
+                    FontFamily="Consolas"
+                    SyntaxHighlighting="DDD"
+                    FontSize="10pt" Margin="10,10,10,10"/>
+                
+                <GridSplitter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="0,0,0,0"  Grid.Row="1" />
+                <DataGrid x:Name="ErrorPane" Grid.Row="2" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Type" Width="100" Binding="{Binding Type}">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Line" Width="40" Binding="{Binding LineNumber}">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Message" Width="*" Binding="{Binding Message}">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+                
+            <!-- editor / dokumentacio ablak separator -->
+            <GridSplitter x:Name="splitterDocumentation" Grid.Column="3" Width="5" HorizontalAlignment="Stretch" Margin="0,0,0,0"  IsEnabled="False" />
+            <!-- dokumentacio ablak -->
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Grid.Column="4">
+                <Grid x:Name="gridDocumentation" Height="Auto" Width="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" IsEnabled="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Background="Beige">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">3D Objects</TextBlock>
+                    </Grid>                    
+                    <Expander Header="Circle" FontWeight="Bold" Grid.Row="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            Circle made up from a 40 sided regular polygon.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Circle.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, radius*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>   
+                    </Expander>
+                    <Expander Header="Cone" FontWeight="Bold" Grid.Row="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            Cone closed with a Circle from below.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Cone.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, radius*, height*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Cube" FontWeight="Bold" Grid.Row="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            A cube, a specific kind of Cuboid.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Cube.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, width*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Cuboid" FontWeight="Bold" Grid.Row="4">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            A cuboid, the generalized cube.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Cuboid.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, width*, height*, depth*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Cylinder" FontWeight="Bold" Grid.Row="5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            A closed cylinder.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Cylinder.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, radius*, height*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Hemisphere" FontWeight="Bold" Grid.Row="6">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            A horizontally cut Sphere. Note that this geometry is not closed from below.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Hemisphere.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, radius*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Quad" FontWeight="Bold" Grid.Row="7">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            A horizontal plane.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Quad.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, width*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Sphere" FontWeight="Bold" Grid.Row="8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            A sphere with the lowest y coordinate point being the origin.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Sphere.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, radius*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Triangle" FontWeight="Bold" Grid.Row="9">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
+                            An equilateral triangle.
+                            </TextBlock>
+                            <Image Source="/DocumentationPics/Triangle.png" Grid.Row="1" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
+                            <Underline>Allowed attributes</Underline><LineBreak/>
+                            position*, width*, rotation-axis, rotation-angle
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Grid Grid.Row="10" Background="Beige">
+                        <TextBlock Grid.Row="10" HorizontalAlignment="Center" VerticalAlignment="Center">Syntax</TextBlock>
+                    </Grid>
+                    <Expander Header="Variables and Types" FontWeight="Bold" Grid.Row="11">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>                            
+                            <Image Source="/DocumentationPics/VariableDecl.png" Grid.Row="0" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="12" Grid.Row="1">  
+                            Variable type could be <Bold>Int Float Vec3</Bold>. The picture above shows the most common
+                            ways of initializing a variable. As you can see explicitly declaring types is completely up to you, 
+                            there is an automatic type inference built into the language. <Bold>A variable identifier starts with a $ symbol
+                            and could only hold alphanumeric characters and _.</Bold> A var declared const could only be assigned once which
+                            give you the possibility to declare lateinit variables. <LineBreak/><LineBreak/>
+                            There are many operation defined between these types, basically every that makes sense (+ - * / %). 
+                            It is also possible to negate a value (-$one) and get access to Vec3 coordinates and modify them separately $vec.x = 0.01f.
+                            Vec3 coordinates are Floats. Assigning to a variable could happen with the (+= -= *= /=) operators.
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="If blocks" FontWeight="Bold" Grid.Row="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="/DocumentationPics/IfElse.png" Grid.Row="0" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="12" Grid.Row="1">  
+                            Just like in most programming languages, you can make if blocks. Keep in mind that
+                            you are obligated to use curly braces. As there is no bool type you might have to put
+                            complex operations in the condition. The two sides of a condition could be compared with
+                            the (== != &lt; &lt;= &gt; &gt;=) operators.
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="For loops" FontWeight="Bold" Grid.Row="13">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="/DocumentationPics/ForLoop.png" Grid.Row="0" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="12" Grid.Row="1">  
+                            You declare a non-const variable, define a range and optionally a step measure and you have a for loop.
+                            The range boundary can be inclusive <Bold>[ ]</Bold> and exclusive <Bold>( )</Bold>. You could also
+                            substitute the numeric literals in the example with variable/operation values, but they will be truncated to integers.
+                            Also note that you cant define dynamic ranges with variables, it will always use the compile time value of a variable.
+                            Defining an infinite loop will cause compile time error.
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Attribute groups" FontWeight="Bold" Grid.Row="14">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="/DocumentationPics/AttrGroup.png" Grid.Row="0" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="12" Grid.Row="1">  
+                            With Attribute groups you could predefine attribute sets, that could be reused by
+                            3D objects. It's worth doing when you have objects that have many common attributes. 
+                            You can include attribute-groups in the object definition with the <Bold>@include('...');</Bold>
+                            statement.
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Making 3D objects" FontWeight="Bold" Grid.Row="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="/DocumentationPics/MakingOf.png" Grid.Row="0" />
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="12" Grid.Row="1">  
+                            You define an object's characteristics with the mixture of attr-groups and attribute value assigns.
+                            Attribute groups should always precede the assign statements. Defining an attribute more than once will
+                            lead to a warning saying that only the last one will be the valid value. However this is not the case
+                            for the <Bold>rotation-axis</Bold> and <Bold>rotation-angle</Bold> attributes. Rotation axes and angles
+                            are grouped into pairs, depending on their order in the code (first axis to the first angle etc). If more
+                            angles defined that axes, then the last angle(s) will be ignored. If more axes defined than angles, then 
+                            the extra axes will use the last defined angle (which might be 0 when there are none. 
+                            Missing required attributes will default to zeros and nullvectors.
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                    <Expander Header="Comments" FontWeight="Bold" Grid.Row="16">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="12" Grid.Row="1">  
+                            The language supports C type line and multiline comments. Commented pieces
+                            of the code are grayed out.
+                            </TextBlock>
+                        </Grid>
+                    </Expander>
+                </Grid>
+            </ScrollViewer>
+            <Grid Background="#D3D3D3" HorizontalAlignment="Right" Height="Auto" VerticalAlignment="Stretch" Width="30" Margin="0,0,0,0" Grid.Column="5">
+                <Button x:Name="bDocumentation" Content="Documentation" HorizontalAlignment="Left" Margin="-35,137,-35,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.5,0.5" Height="30" Click="BDocumentationClick">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+                <Button x:Name="bProjects" Content="Projects" HorizontalAlignment="Left" Margin="-35,36,-35,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.5,0.5" Height="30" Click="BProjectsClick">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+        </Grid>
+
+       
+    </Grid>
+
+
+</Window>

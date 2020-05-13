@@ -1,0 +1,6 @@
+C:\UnitySzakdolgozat1\3DLayoutScriptIDE\3DLayoutScriptIDE\obj\Debug\DDD_layout_scriptLexer.cs
+C:\UnitySzakdolgozat1\3DLayoutScriptIDE\3DLayoutScriptIDE\obj\Debug\DDD_layout_scriptParser.cs
+C:\UnitySzakdolgozat1\3DLayoutScriptIDE\3DLayoutScriptIDE\obj\Debug\DDD_layout_scriptListener.cs
+C:\UnitySzakdolgozat1\3DLayoutScriptIDE\3DLayoutScriptIDE\obj\Debug\DDD_layout_scriptBaseListener.cs
+C:\UnitySzakdolgozat1\3DLayoutScriptIDE\3DLayoutScriptIDE\obj\Debug\DDD_layout_scriptVisitor.cs
+C:\UnitySzakdolgozat1\3DLayoutScriptIDE\3DLayoutScriptIDE\obj\Debug\DDD_layout_scriptBaseVisitor.cs
