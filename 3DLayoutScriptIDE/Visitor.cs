@@ -669,6 +669,11 @@ namespace _3D_layout_script
             string attrName = context.ATTRIBUTE().GetText();
             dynamic value = VisitOperation(context.operation());
             
+            if (context.operation() == null)
+            {
+                value = context.STRING().ToString().Trim('\'');
+            }
+
             if (!AttributeManager.CanBind(attrName,  Extensions.Extensions.ToString(value)))
             {
                 alerts.Add(new warning(context.Start.Line, $"{AttributeManager.ErrorMsg}. Line ignored"));
@@ -679,8 +684,23 @@ namespace _3D_layout_script
             // you cant rotate points around nullvector
             if (attrName == "rotation-axis" && value == new vec3(0,0,0))
             {
-                alerts.Add(new warning(context.Start.Line, "You cannot rotate around nullvector!"));
+                alerts.Add(new warning(context.Start.Line, "You cannot rotate around [0, 0, 0] axis"));
             }
+
+            // quality sanity check
+            // you can only use specific enums, and not random strings
+            if (attrName == "quality" && !(value == "very-low" || value == "low" || value == "medium" || value == "high"))
+            {
+                alerts.Add(new warning(context.Start.Line, "Quality can only hold 'very-low', 'low', 'medium' or 'high'"));
+            }
+
+            // scale sanity check
+            // dont scale with 0 or less than 0 (rather use rotation for things like that)
+            if (attrName == "scale" && (value.x <= 0 || value.y <= 0 || value.z <= 0))
+            {
+                alerts.Add(new warning(context.Start.Line, "For scaling only positive real numbers allowed on every axis"));
+            }
+
 
             return new Attribute(attrName, value);
         }

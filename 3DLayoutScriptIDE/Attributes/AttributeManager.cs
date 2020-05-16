@@ -57,6 +57,20 @@
                     }
                     ErrorMsg = "Rotation-angle can only hold Int and Float values";
                     break;
+                case "scale":
+                    if (type == "Vec3")
+                    {
+                        return true;
+                    }
+                    ErrorMsg = "Scale can only hold Vec3 values";
+                    break;
+                case "quality":
+                    if (type == "String")
+                    {
+                        return true;
+                    }
+                    ErrorMsg = "Quality can only hold 'very-low', 'low', 'medium' or 'high'";
+                    break;
             }
 
             return false;

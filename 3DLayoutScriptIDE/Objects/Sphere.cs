@@ -12,6 +12,7 @@ namespace _3D_layout_script.Objects
         public Sphere() : base("sphere.obj")
         {
             requiredAttributes.Add("radius");
+            allowedAttributes.Add("quality");
         }
 
         public override bool SetAttributes(AttributeList attrList)
@@ -22,6 +23,9 @@ namespace _3D_layout_script.Objects
                 {
                     case "radius":
                         radius = attr.Value;
+                        break;
+                    case "quality":
+                        // TODO
                         break;
                     case "default":
                         // ősosztály valósítja meg

@@ -215,6 +215,15 @@ namespace _3DLayoutScriptIDE
 
         private void matchCharKeywordPairs()
         {
+            List<string> stringList = new List<string>
+            {
+                "'very-low'",
+                "'low'",
+                "'medium'",
+                "'high'"
+            };
+            charKeywordPairs.Add('\'', stringList);
+
             List<string> aList = new List<string>
             {
                 "attr-group"
@@ -279,7 +288,8 @@ namespace _3DLayoutScriptIDE
 
             List<string> qList = new List<string>
             {
-                "quad"
+                "quad",
+                "quality"
             };
             charKeywordPairs.Add('q', qList);
 

@@ -77,8 +77,8 @@ variable_decl:          (CONST)? VAR ID (COLON TYPE)?  (EQ operation)? SEMI;
 assign_statement:       (simple_modifyable_exp EQ operation SEMI) |
                         (simple_modifyable_exp other_binary_op operation SEMI);
 
-ATTRIBUTE:          'radius' | 'position' | 'height' | 'width' | 'depth' | 'rotation-axis' | 'rotation-angle';
-attr:               ATTRIBUTE COLON operation SEMI;
+ATTRIBUTE:          'radius' | 'position' | 'height' | 'width' | 'depth' | 'rotation-axis' | 'rotation-angle' | 'scale' | 'quality';
+attr:               ATTRIBUTE COLON (operation | STRING) SEMI;
 attr_group:         ATTR_GROUP BRACKET_O STRING BRACKET_C CURLY_O (attr)+ CURLY_C;
 
 include_statement:  INCLUDE BRACKET_O STRING BRACKET_C SEMI;

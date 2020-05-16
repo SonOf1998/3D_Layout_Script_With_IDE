@@ -43,6 +43,7 @@ namespace _3D_layout_script.Objects
             requiredAttributes.Add("position");
             allowedAttributes.Add("rotation-axis");
             allowedAttributes.Add("rotation-angle");
+            allowedAttributes.Add("scale");
         }
 
         public DDDObject(string objTemplateFileName) : this()
@@ -83,6 +84,9 @@ namespace _3D_layout_script.Objects
                         break;
                     case "rotation-axis":
                         rotationAxes.Add(new vec3(attr.Value));
+                        break;
+                    case "quality":
+                        // TODO
                         break;
                     case "default":
                         // ősosztály valósítja meg

@@ -14,6 +14,11 @@ namespace Extensions
             return "Float";
         }
 
+        public static string ToString(string s)
+        {
+            return "String";
+        }
+
         public static string ToString(vec3 _)
         {
             return "Vec3";
