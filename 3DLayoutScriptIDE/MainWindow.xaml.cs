@@ -585,10 +585,18 @@ namespace _3DLayoutScriptIDE
             }
             ErrorPane.ItemsSource = rows;
 
-            if (objects.Count == 0 || hadErrors)
+            if (hadErrors)
             {
                 return;
             }
+
+            if (objects.Count == 0)
+            {
+                rows.Add(new ErrorPaneRow("Warning", null, "No valid 3DObjects found. Skipped generating .obj"));
+                ErrorPane.ItemsSource = null;
+                ErrorPane.ItemsSource = rows;
+            }
+
         
             if (projectFile == null)
             {

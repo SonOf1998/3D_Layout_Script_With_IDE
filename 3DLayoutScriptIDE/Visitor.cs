@@ -26,12 +26,18 @@ namespace _3D_layout_script
         Stack<Scope> symbolTable;
         Scope currentScope;
 
+        Stack<int> everyIfElseLineNums; // összes if-else if-else ág sorszámát tartalmazza
+        Stack<int> usedIfElseLineNums;  // csak a kód futása során használtakat tartalmazza
+        // A kettő különbsége fogja jelölni a használatlan ágakat, amelyre warningot adunk.
+
         public Visitor()
         {
             symbolTable = new Stack<Scope>();
             alerts = new HashSet<alert>();
             attributeBlocks = new List<AttributeBlock>();
             DDDObjects = new List<DDDObject>();
+            everyIfElseLineNums = new Stack<int>();
+            usedIfElseLineNums = new Stack<int>();
         }
 
         public void PrintSymbolTree()
@@ -691,18 +697,43 @@ namespace _3D_layout_script
 #if RELEASE
             symbolTable = null;
 #endif
+
+            var unusedIfElseIfElseBranches = everyIfElseLineNums.Except(usedIfElseLineNums);
+            foreach(int unusedBranchLineNum in unusedIfElseIfElseBranches.Reverse())
+            {
+                alerts.Add(new warning(unusedBranchLineNum, "Unused (if - else if - else) branch"));
+            }
+
             return DDDObjects;
         }
 
-        /* If blokkon megyünk végig
+        /* Előre kimentjük az if-else if-else blokk ágainak sorszámát.
+         * Ez később az unused code hibaüzenetekhez fontos (vizsgáljuk az
+         * olyan ágakat, amelyekre a kód nem fut rá sohasem)
+         * 
+         * If blokkon megyünk végig
          * Ha a feltétel igaz, akkor az if blokk-ba megyünk bele.
          * Ha nem akkor végignézzük az else if-eken.
          * Ha azok közül sem igaz egyik sem, akkor az else blokk kerül végrehajtásra.
+         * Ezek közben mentjük a ténylegesen használt ágak sorszámát.
          * 
          * Egy új scope-ot hozunk létre, ha nem teljesül egyik if feltétel sem, akkor ez a felesleges scope egyből poppol.
          */ 
         public override object VisitIf_statement([NotNull] DDD_layout_scriptParser.If_statementContext context)
-        {          
+        {
+            //////////// PRESCAN //////////////
+            everyIfElseLineNums.Push(context.Start.Line);           // if ág sorszáma
+            foreach (var elseif in context.else_if_statement())
+            {
+                everyIfElseLineNums.Push(elseif.Start.Line);        // else if ágak sorszáma
+            }
+            var elseContext = context.else_statement();
+            if (elseContext != null)
+            {
+                everyIfElseLineNums.Push(elseContext.Start.Line);   // else ágak sorszáma
+            }
+            ///////////////////////////////////
+
             currentScope = new Scope();
             symbolTable.Push(currentScope);
 
@@ -713,17 +744,20 @@ namespace _3D_layout_script
                 {
                     if ((bool)VisitElse_if_statement(elseif) == true)
                     {
+                        usedIfElseLineNums.Push(elseif.Start.Line);
                         return null;
                     }
                 }
-
-                if (context.else_statement() != null)
+                
+                if (elseContext != null)
                 {
+                    usedIfElseLineNums.Push(elseContext.Start.Line);
                     VisitElse_statement(context.else_statement());
                 }
             }
             else
             {
+                usedIfElseLineNums.Push(context.Start.Line);
                 foreach (var content in context.if_content())
                 {
                     VisitIf_content(content);
