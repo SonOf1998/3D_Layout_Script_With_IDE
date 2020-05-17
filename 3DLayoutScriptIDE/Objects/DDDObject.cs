@@ -29,9 +29,11 @@ namespace _3D_layout_script.Objects
         protected HashSet<string> allowedAttributes;    // minden más attribútum
         protected HashSet<string> requiredAttributes;   // kötelezően megadandó attribútumok
 
-        protected vec3         position = new vec3(0, 0, 0);    // default érték
-        protected List<vec3>   rotationAxes;
-        protected List<double> rotationAngles;
+        private vec3         position = new vec3(0, 0, 0);    // default érték
+        private vec3         scale    = new vec3(1, 1, 1);    // default skálázás
+        private List<vec3>   rotationAxes;
+        private List<double> rotationAngles;
+        private Matrix4      modelMatrixInverse;              // model mátrix inverzével kell szorozni a normálokat anizotrópikus skálázásnál
 
         private DDDObject()
         {
@@ -39,6 +41,7 @@ namespace _3D_layout_script.Objects
             requiredAttributes = new HashSet<string>();
             rotationAngles = new List<double>();
             rotationAxes = new List<vec3>();
+            modelMatrixInverse = new Matrix4(); // identity
 
             requiredAttributes.Add("position");
             allowedAttributes.Add("rotation-axis");
@@ -85,14 +88,27 @@ namespace _3D_layout_script.Objects
                     case "rotation-axis":
                         rotationAxes.Add(new vec3(attr.Value));
                         break;
-                    case "quality":
-                        // TODO
+                    case "scale":
+                        scale = new vec3(attr.Value);
                         break;
                     case "default":
                         // ősosztály valósítja meg
                         break;
                 }
             }
+
+            modelMatrixInverse.Translate(position);
+            modelMatrixInverse.Scale(scale);
+            for (int i = 0; i < rotationAngles.Count; ++i)
+            {
+                Matrix4 rotation = Matrix4.CreateRotationMatrix(rotationAxes[i], rotationAngles[i]);
+                modelMatrixInverse *= rotation;
+            }
+
+            // TODO jövőre!!
+            /*modelMatrixInverse.Invert();
+            modelMatrixInverse.Transpose();*/
+
 
             // kiírjuk a fejlesztőnek segítségül, hogy milyen attribútummokat használhat az objektumnál.
             // *-al jelöljük a kötelezőket.
@@ -142,6 +158,33 @@ namespace _3D_layout_script.Objects
             return new ObjFile(transformedVertices, obj.Normals, obj.Faces);
         }
 
+        protected ObjFile ScaleByVector(ObjFile obj)
+        {
+            List<string> vertices = obj.Vertices;
+            List<string> newVertices = new List<string>(vertices.Count);
+
+            foreach (var vertex in vertices)
+            {
+                string newLine = vertex;
+
+                string[] splitLine = vertex.Split(' ');
+
+                double x = Double.Parse(splitLine[1]);
+                double y = Double.Parse(splitLine[2]);
+                double z = Double.Parse(splitLine[3]);
+
+                vec3 point = new vec3(x, y, z);
+                point.x *= scale.x;
+                point.y *= scale.y;
+                point.z *= scale.z;
+
+                newLine = $"{splitLine[0]} {point.x} {point.y} {point.z}";
+                newVertices.Add(newLine);
+            }
+
+            return new ObjFile(newVertices, obj.Normals, obj.Faces);
+        }
+
         // őszosztály el tudja végezni a forgatásokat
         protected ObjFile RotateByAxisAnglePair(ObjFile obj)
         {
@@ -189,7 +232,7 @@ namespace _3D_layout_script.Objects
 
                     for (int i = 0; i < rotationAngles.Count; ++i)
                     {
-                        point = Quaternion.Rotate(point, rotationAxes[i], rotationAngles[i]);
+                        point *= modelMatrixInverse;
                     }
 
                     point = vec3.Normalize(point);

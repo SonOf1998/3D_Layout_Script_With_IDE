@@ -65,6 +65,7 @@ namespace _3D_layout_script.Objects
             }
 
             objFile = new ObjFile(newVertices, objFile.Normals, objFile.Faces);     // scaled
+            objFile = ScaleByVector(objFile);
             objFile = RotateByAxisAnglePair(objFile);                               // rotated
             return TranslateWithPosition(objFile);                                  // translated
         }

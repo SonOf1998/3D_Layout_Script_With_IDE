@@ -88,6 +88,10 @@ namespace _3D_layout_script
             return !(a == b);
         }
 
+        public static vec3 operator*(vec3 v, Matrix4 mat)
+        {
+            return v.x * mat.GetLine1() + v.y * mat.GetLine2() + v.z * mat.GetLine3() + mat.GetLine4();
+        }
 
 
         // skaláris szorzat

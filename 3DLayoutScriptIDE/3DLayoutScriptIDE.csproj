@@ -83,6 +83,7 @@
     <Compile Include="Alert\Alert.cs" />
     <Compile Include="Alert\Error.cs" />
     <Compile Include="Alert\Warning.cs" />
+    <Compile Include="Algebra\Matrix4.cs" />
     <Compile Include="Algebra\Quaternion.cs" />
     <Compile Include="Algebra\vec3.cs" />
     <Compile Include="Attributes\Attribute.cs" />
