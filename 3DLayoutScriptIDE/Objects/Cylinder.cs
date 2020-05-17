@@ -14,7 +14,7 @@ namespace _3D_layout_script.Objects
         {
             requiredAttributes.Add("height");
             requiredAttributes.Add("radius");
-            allowedAttributes.Add("quality");
+            //allowedAttributes.Add("quality");  szétcsúszik autodesk maya-ban ha rontom a minőségét :( TODO
         }
 
         public override bool SetAttributes(AttributeList attrList)

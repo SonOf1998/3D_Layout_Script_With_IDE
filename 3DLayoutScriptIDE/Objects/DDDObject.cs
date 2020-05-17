@@ -24,7 +24,7 @@ namespace _3D_layout_script.Objects
             }
         }
 
-        readonly string objTemplateFileName;
+        protected string objTemplateFileName;
 
         protected HashSet<string> allowedAttributes;    // minden más attribútum
         protected HashSet<string> requiredAttributes;   // kötelezően megadandó attribútumok

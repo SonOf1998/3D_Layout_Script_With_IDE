@@ -9,7 +9,7 @@ namespace _3D_layout_script.Objects
     {
         private double radius = 0;
 
-        public Hemisphere() : base("hemisphere.obj")
+        public Hemisphere() : base("hemisphere-high.obj")
         {
             requiredAttributes.Add("radius");
             allowedAttributes.Add("quality");
@@ -25,7 +25,7 @@ namespace _3D_layout_script.Objects
                         radius = attr.Value;
                         break;
                     case "quality":
-                        // TODO
+                        objTemplateFileName = objTemplateFileName.Substring(0, objTemplateFileName.IndexOf("hemisphere") + 10) + "-" + attr.Value + ".obj";
                         break;
                     case "default":
                         // ősosztály valósítja meg

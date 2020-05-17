@@ -9,7 +9,7 @@ namespace _3D_layout_script.Objects
     {
         private double radius = 0;
 
-        public Circle() : base("circle.obj")
+        public Circle() : base("circle-high.obj")
         {
             requiredAttributes.Add("radius");
             allowedAttributes.Add("quality");
@@ -25,7 +25,7 @@ namespace _3D_layout_script.Objects
                         radius = attr.Value;
                         break;
                     case "quality":
-                        // TODO
+                        objTemplateFileName = objTemplateFileName.Substring(0, objTemplateFileName.IndexOf("circle") + 6) + "-" + attr.Value + ".obj";
                         break;
                     case "default":
                         // ősosztály valósítja meg

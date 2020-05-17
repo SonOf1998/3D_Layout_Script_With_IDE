@@ -13,7 +13,6 @@ namespace _3D_layout_script.Objects
         public Quad() : base("quad.obj")
         {
             requiredAttributes.Add("width");
-            requiredAttributes.Add("height");
         }
 
         public override bool SetAttributes(AttributeList attrList)
@@ -24,9 +23,6 @@ namespace _3D_layout_script.Objects
                 {
                     case "width":
                         width = attr.Value;
-                        break;
-                    case "height":
-                        height = attr.Value;
                         break;
                     case "default":
                         // ősosztály valósítja meg
@@ -53,7 +49,7 @@ namespace _3D_layout_script.Objects
                 double z = Double.Parse(splitVertex[3]);
 
                 x *= width;
-                y *= height;     // 2D-s, a 0-át szorozzuk
+                y *= width;     // 2D-s, a 0-át szorozzuk
                 z *= width; 
 
                 newVertices.Add($"{splitVertex[0]} {x} {y} {z}");

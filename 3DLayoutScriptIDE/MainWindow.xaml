@@ -184,7 +184,7 @@
                             <Image Source="/DocumentationPics/Circle.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, radius*, rotation-axis, rotation-angle
+                            position*, radius*, rotation-axis, rotation-angle, quality, scale
                             </TextBlock>
                         </Grid>   
                     </Expander>
@@ -196,12 +196,12 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="0">  
-                            Cone closed with a Circle from below.
+                            Cone which is not closed from below.
                             </TextBlock>
                             <Image Source="/DocumentationPics/Cone.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, radius*, height*, rotation-axis, rotation-angle
+                            position*, radius*, height*, rotation-axis, rotation-angle, quality, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -218,7 +218,7 @@
                             <Image Source="/DocumentationPics/Cube.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, width*, rotation-axis, rotation-angle
+                            position*, width*, rotation-axis, rotation-angle, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -235,7 +235,7 @@
                             <Image Source="/DocumentationPics/Cuboid.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, width*, height*, depth*, rotation-axis, rotation-angle
+                            position*, width*, height*, depth*, rotation-axis, rotation-angle, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -252,7 +252,7 @@
                             <Image Source="/DocumentationPics/Cylinder.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, radius*, height*, rotation-axis, rotation-angle
+                            position*, radius*, height*, rotation-axis, rotation-angle, quality, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -269,7 +269,7 @@
                             <Image Source="/DocumentationPics/Hemisphere.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, radius*, rotation-axis, rotation-angle
+                            position*, radius*, rotation-axis, rotation-angle, quality, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -286,7 +286,7 @@
                             <Image Source="/DocumentationPics/Quad.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, width*, rotation-axis, rotation-angle
+                            position*, width*, rotation-axis, rotation-angle, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -303,7 +303,7 @@
                             <Image Source="/DocumentationPics/Sphere.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, radius*, rotation-axis, rotation-angle
+                            position*, radius*, rotation-axis, rotation-angle, quality, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -320,7 +320,7 @@
                             <Image Source="/DocumentationPics/Triangle.png" Grid.Row="1" />
                             <TextBlock TextWrapping="Wrap" FontWeight="Regular"  FontSize="14" Grid.Row="2">  
                             <Underline>Allowed attributes</Underline><LineBreak/>
-                            position*, width*, rotation-axis, rotation-angle
+                            position*, width*, rotation-axis, rotation-angle, scale
                             </TextBlock>
                         </Grid>
                     </Expander>
@@ -406,7 +406,9 @@
                             for the <Bold>rotation-axis</Bold> and <Bold>rotation-angle</Bold> attributes. Rotation axes and angles
                             are grouped into pairs, depending on their order in the code (first axis to the first angle etc). If more
                             angles defined that axes, then the last angle(s) will be ignored. If more axes defined than angles, then 
-                            the extra axes will use the last defined angle (which might be 0 when there are none. 
+                            the extra axes will use the last defined angle (which might be 0 when there are none. In case of complex
+                            geometries (approximated with large number of triangles) you can set the quality to either <Bold>very-low low medium</Bold>
+                            or <Bold>high</Bold>.
                             Missing required attributes will default to zeros and nullvectors.
                             </TextBlock>
                         </Grid>

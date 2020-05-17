@@ -10,7 +10,7 @@ namespace _3D_layout_script.Objects
         private double radius = 0;
         private double height = 0;
 
-        public Cone() : base("cone.obj")
+        public Cone() : base("cone-high.obj")
         {
             requiredAttributes.Add("height");
             requiredAttributes.Add("radius");
@@ -30,7 +30,7 @@ namespace _3D_layout_script.Objects
                         height = attr.Value;
                         break;
                     case "quality":
-                        // TODO
+                        objTemplateFileName = objTemplateFileName.Substring(0, objTemplateFileName.IndexOf("cone") + 4) + "-" + attr.Value + ".obj";
                         break;
                     case "default":
                         // ősosztály valósítja meg
