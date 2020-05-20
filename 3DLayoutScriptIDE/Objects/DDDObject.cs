@@ -232,8 +232,10 @@ namespace _3D_layout_script.Objects
 
                     for (int i = 0; i < rotationAngles.Count; ++i)
                     {
-                        point *= modelMatrixInverse;
+                        point = Quaternion.Rotate(point, rotationAxes[i], rotationAngles[i]);
                     }
+                    // modell mátrix inverzes kezelése a normáloknak.
+
 
                     point = vec3.Normalize(point);
                     newLine = $"{splitLine[0]} {point.x} {point.y} {point.z}";

@@ -6,7 +6,13 @@
         
         public static bool CanAssign(string s, dynamic d)
         {
-            switch(s)
+            if (d is ErrorObject)
+            {
+                ErrorMsg = "Right hand side has invalid value";
+                return false;
+            }
+
+            switch (s)
             {
                 case "Int":
                     return CanAssign(1, d);
@@ -15,12 +21,7 @@
                 case "Vec3":
                     return CanAssign(new vec3(), d);
             }
-
-            if (d is ErrorObject)
-            {
-                ErrorMsg = "Right hand side has invalid value";
-                return false;
-            }
+                        
 
             // Unknown típushoz minden mehet
             return true;
