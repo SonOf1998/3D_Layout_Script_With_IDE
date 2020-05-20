@@ -547,7 +547,7 @@ namespace _3DLayoutScriptIDE
             var code = textEditor.Text;
             var inputStream = new AntlrInputStream(code);
             var lexer = new DDD_layout_scriptLexer(inputStream);
-            lexer.RemoveErrorListeners();
+            //lexer.RemoveErrorListeners();
             
 
 

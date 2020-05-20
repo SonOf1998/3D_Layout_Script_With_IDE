@@ -1009,22 +1009,22 @@ namespace _3D_layout_script
                 // nincsen jobb oldal sem
                 if (op == null)
                 {           
-                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Unknown", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Unknown", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                 }
                 // jobb oldalon egy float van
                 else if (Regex.IsMatch(op.GetText(), @"^([0-9]*)?\.[0-9]+f?$"))
                 {
-                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Float", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Float", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                 }
                 // jobb oldalon egy int van
                 else if (Regex.IsMatch(op.GetText(), @"^[0-9]+$"))
                 {
-                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Int", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Int", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                 }
                 // jobb oldalon egy vec3 van
                 else if (Regex.IsMatch(op.GetText(), @"^\[[^,]+,[^,]+,[^,]+\]$"))
                 {
-                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Vec3", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                    ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Vec3", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                 }
                 // jobb oldalon valami kifejezés van
                 else
@@ -1032,13 +1032,13 @@ namespace _3D_layout_script
                     // vektor jöhet ki végeredményül, int, float már tuti nem
                     if (op.GetText().Contains("["))
                     {
-                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Vec3", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Vec3", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                     }
                     // bármi kijöhet 
                     else
                     {
                         dynamic result = VisitOperation(op);
-                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, Extensions.Extensions.ToString(result), idStr), result, new Stack<Scope>(symbolTable)));
+                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, Extensions.Extensions.ToString(result), idStr), result, new Stack<Scope>(new Stack<Scope>(symbolTable))));
                     }
                 }
             }
@@ -1047,13 +1047,13 @@ namespace _3D_layout_script
                 switch (context.TYPE().GetText())
                 {
                     case "Float":
-                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Float", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Float", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                         break;
                     case "Int":
-                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Int", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Int", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                         break;
                     case "Vec3":
-                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Vec3", idStr), VisitOperation(op), new Stack<Scope>(symbolTable)));
+                        ErrorHandlingOrCommit(context, currentScope.Add(new Symbol(context.CONST() != null, "Vec3", idStr), VisitOperation(op), new Stack<Scope>(new Stack<Scope>(symbolTable))));
                         break;
 
                 }
